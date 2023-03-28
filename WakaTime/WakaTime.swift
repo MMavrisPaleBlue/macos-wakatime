@@ -66,6 +66,8 @@ struct WakaTime: App {
 
     private func registerAsLoginItem() {
         guard SMAppService.mainApp.status == .notFound else { return }
+        
+        guard SMAppService.mainApp.status == .enabled || SMAppService.mainApp.status == .requiresApproval else { return }
 
         do {
             try SMAppService.mainApp.register()
