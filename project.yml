@@ -4,6 +4,11 @@ options:
   bundleIdPrefix: macos-wakatime
   createIntermediateGroups: true
 
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: 2.0.0
+
 targets:
   WakaTime:
     type: application
@@ -22,3 +27,5 @@ targets:
     postCompileScripts:
       - script: ./Scripts/Lint/swiftlint lint --quiet
         name: Swiftlint
+    dependencies:
+      - package: Sparkle

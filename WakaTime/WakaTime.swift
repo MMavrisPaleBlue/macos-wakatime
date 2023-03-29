@@ -1,5 +1,6 @@
 import ServiceManagement
 import SwiftUI
+import Sparkle
 
 @main
 // swiftlint:disable force_unwrapping
@@ -18,15 +19,21 @@ struct WakaTime: App {
     enum Constants {
         static let settingsDeepLink: String = "wakatime://settings"
     }
+    
+    private let updaterController: SPUStandardUpdaterController
 
     init() {
-        registerAsLoginItem()
+        // If you want to start the updater manually, pass false to startingUpdater and call .startUpdater() later
+        // This is where you can also pass an updater delegate if you need one
+        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+        
+        //registerAsLoginItem()
         Task {
             if !(await Self.isCLILatest()) {
                 Self.downloadCLI()
             }
         }
-        requestA11yPermission()
+        //requestA11yPermission()
         watcher.eventHandler = handleEvent
         checkForApiKey()
     }
@@ -36,6 +43,9 @@ struct WakaTime: App {
             Button("Dashboard") { self.dashboard() }
             Button("Settings") {
                 promptForApiKey()
+            }
+            Button("Check for updates") {
+                CheckForUpdatesView(updater: updaterController.updater)
             }
             Divider()
             Button("Quit") { self.quit() }
