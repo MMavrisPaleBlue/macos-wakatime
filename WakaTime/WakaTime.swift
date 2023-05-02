@@ -11,8 +11,7 @@ struct WakaTime: App {
 
     @StateObject private var settings = SettingsModel()
     var state = State()
-    @State private var lastFile: URL?
-    @State private var lastTime: TimeInterval = 0
+
     @StateObject var updaterViewModel = UpdaterViewModel()
 
     let watcher = Watcher()
