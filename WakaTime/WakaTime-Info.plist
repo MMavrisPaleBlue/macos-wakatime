@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleIdentifier</key>
-	<string></string>
-	<key>LSUIElement</key>
-	<true/>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -17,5 +13,13 @@
 			</array>
 		</dict>
 	</array>
+	<key>SUEnableDownloaderService</key>
+	<true/>
+	<key>SUEnableInstallerLauncherService</key>
+	<true/>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/MMavrisPaleBlue/FileStorage/main/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>KzQTON8yji6wCxUeOtxxQ3F45o0pJZPFWRpnnBYtj74=</string>
 </dict>
 </plist>
