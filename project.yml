@@ -29,3 +29,5 @@ targets:
           ./Scripts/Lint/swiftlint --fix
           ./Scripts/Lint/swiftlint lint --quiet
         name: Swiftlint
+    dependencies:
+      - package: Sparkle

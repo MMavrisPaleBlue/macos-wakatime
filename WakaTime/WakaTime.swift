@@ -12,6 +12,7 @@ struct WakaTime: App {
     @StateObject private var settings = SettingsModel()
     @State private var lastFile: URL?
     @State private var lastTime: TimeInterval = 0
+    @StateObject var updaterViewModel = UpdaterViewModel()
 
     let watcher = Watcher()
     let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
@@ -20,19 +21,13 @@ struct WakaTime: App {
         static let settingsDeepLink: String = "wakatime://settings"
     }
 
-    private let updaterController: SPUStandardUpdaterController
-
     init() {
-        // If you want to start the updater manually, pass false to startingUpdater and call .startUpdater() later
-        // This is where you can also pass an updater delegate if you need one
-        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
-
         // registerAsLoginItem()
-        Task {
-            if !(await Self.isCLILatest()) {
-                Self.downloadCLI()
-            }
-        }
+//        Task {
+//            if !(await Self.isCLILatest()) {
+//                Self.downloadCLI()
+//            }
+//        }
         // requestA11yPermission()
         watcher.eventHandler = handleEvent
         checkForApiKey()
@@ -44,21 +39,26 @@ struct WakaTime: App {
             Button("Settings") {
                 promptForApiKey()
             }
-            Button("Check for updates") {
-                CheckForUpdatesView(updater: updaterController.updater)
-            }
+            Button("Check for Updates", action: updaterViewModel.checkForUpdates)
+                .disabled(!updaterViewModel.canCheckForUpdates)
             Divider()
             Button("Quit") { self.quit() }
         }
         WindowGroup("WakaTime Settings", id: "settings") {
             SettingsView(apiKey: $settings.apiKey)
-        }.handlesExternalEvents(matching: ["settings"])
+        }
+        .handlesExternalEvents(matching: ["settings"])
+        .commands {
+            CommandGroup(after: .appInfo) {
+                CheckForUpdatesView(updaterViewModel: updaterViewModel)
+            }
+        }
     }
 
     private func checkForApiKey() {
         let apiKey = ConfigFile.getSetting(section: "settings", key: "api_key")
         if apiKey.isEmpty {
-            openSettingsDeeplink()
+            // openSettingsDeeplink()
         }
     }
 
